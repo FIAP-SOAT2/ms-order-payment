@@ -1,4 +1,3 @@
-// domain/paymentUseCase.js
 const PaymentRepository = require('./paymentRepository');
 
 class PaymentUseCase {
@@ -7,11 +6,19 @@ class PaymentUseCase {
     }
 
     async processPayment(data) {
-        return this.paymentRepository.createPayment(data);
+        try {
+            return this.paymentRepository.createPayment(data);
+        } catch (error) {
+            throw error; // Rethrow Mercado Pago API errors
+        }
     }
 
-    async getPayments() {
-        return this.paymentRepository.getPayments();
+    async getPayments(criteria, sort, external_reference) {
+        try {
+            return this.paymentRepository.getPayments(criteria, sort, external_reference);
+        } catch (error) {
+            throw error; // Rethrow Mercado Pago API errors
+        }
     }
 }
 

@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const swaggerUi = require('swagger-ui-express');
-// const swaggerSpecs = require('../interfaces/swagger/swagger');
+require('dotenv').config();
+
 const paymentRoutes = require('../routes/payment');
 
 const app = express();
@@ -12,9 +12,6 @@ app.use(bodyParser.json());
 // Rotas
 app.use('/payment', paymentRoutes);
 
-// Swagger
-// app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
-
 
 const start = () => {
     app.listen(port, () => {
@@ -22,4 +19,4 @@ const start = () => {
     });
 };
 
-module.exports = { start };
+module.exports = {start};

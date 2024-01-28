@@ -7,11 +7,21 @@ class PaymentService {
     }
 
     async processPayment(data) {
-        return this.paymentUseCase.processPayment(data);
+        try {
+            return await this.paymentUseCase.processPayment(data);
+        } catch (error) {
+            console.log('Error in PaymentService:', error);
+            throw error; // Rethrow Mercado Pago API errors
+        }
     }
 
-    async getPayments() {
-        return this.paymentUseCase.getPayments();
+    async getPayments(criteria, sort, external_reference) {
+        try {
+            return await this.paymentUseCase.getPayments(criteria, sort, external_reference);
+        } catch (error) {
+            console.log('Error in PaymentService:', error);
+            throw error; // Rethrow Mercado Pago API errors
+        }
     }
 }
 
