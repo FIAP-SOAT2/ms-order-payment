@@ -1,0 +1,4 @@
+node_modules
+src/main/.env
+src/interfaces/_snapshots_
+coverage
