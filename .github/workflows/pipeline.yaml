@@ -1,0 +1,71 @@
+name: CI/CD with Minikube
+
+on:
+  push:
+    branches: [ "main" ]
+    paths-ignore:
+      - '**/*.md'
+      - .github/dependabot.yml
+  pull_request:
+    branches: [ "main" ]
+    paths-ignore:
+      - '**/*.md'
+      - .github/dependabot.yml
+
+env:
+  PORT: 3040
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  ci:
+    name: Build and test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install Dependencies
+        run: npm install
+      
+      - name: Run Tests
+        run: npm test
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Start minikube
+        uses: medyagh/setup-minikube@master
+
+      - name: Try the cluster !
+        run: kubectl get pods -A
+
+      - name: Build Docker Image
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/ms-payment:latest .
+
+      - name: Push Docker Image to Docker Hub
+        run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/ms-payment:latest
+
+  cd:
+    name: Deploy to minikube
+    if: ${{ success() && github.event_name != 'pull_request' }}
+    needs: [ci]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to minikube
+        run: kubectl apply -f k8s/

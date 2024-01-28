@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ms-payment-service
+  namespace: default
+  labels:
+    name: ms-payment
+    app: service
+spec:
+  type: LoadBalancer
+  ports:
+  - name: "http"
+    port: 3040
+    targetPort: 3040
+  externalIPs:
+  - 192.168.49.2
+  selector:
+    app: ms-payment

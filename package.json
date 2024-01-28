@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "jest --verbose --testTimeout=30000 --runInBand",
-    "test:coverage": "jest --verbose --testTimeout=30000 --runInBand --coverage"
+    "test:coverage": "jest --verbose --testTimeout=30000 --runInBand --coverage",
+    "start": "node src/main/index.js"
   },
   "author": "",
   "license": "ISC",
