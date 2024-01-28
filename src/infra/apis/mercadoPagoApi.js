@@ -1,14 +1,17 @@
-// infra/mercadoPagoApi.js
 const {MercadoPagoConfig, Payment} = require('mercadopago');
 
 class MercadoPagoApi {
 
     constructor() {
-        this.client = new MercadoPagoConfig({
-            accessToken: process.env.ACCESS_TOKEN
-        });
+        if (!this.client) {
+            this.client = new MercadoPagoConfig({
+                accessToken: process.env.ACCESS_TOKEN
+            });
+        }
 
-        this.payment = new Payment(this.client);
+        if (!this.payment) {
+            this.payment = new Payment(this.client);
+        }
     }
 
     async processPayment(paymentInfo) {
@@ -19,34 +22,35 @@ class MercadoPagoApi {
                     description: paymentInfo.description,
                     payment_method_id: paymentInfo.payment_method_id,
                     payer: {
-                        email: paymentInfo.email,
-                    }
+                        email: paymentInfo.payer.email
+                    },
                 }
             });
-
             return paymentResult;
         } catch (error) {
-            console.error(error);
+            console.error('Error in Mercado Pago API:', error);
+            throw error; // Rethrow Mercado Pago API errors 400, 403, 404
         }
     }
 
-    async getPayment() {
+    async getPayments(criteria = 'desc', sort = 'date_created', external_reference = null) {
         try {
+
             const paymentResult = await this.payment.search({
                 options: {
-                    criteria: 'desc',
-                    sort: 'date_created',
-                    external_reference: 'ID_REF'
+                    criteria: criteria,
+                    sort: sort,
+                    external_reference: external_reference
                 }
             });
 
             return paymentResult;
 
         } catch (error) {
-            console.error(error);
+            console.error('Error in Mercado Pago API:', error);
+            throw error; // Rethrow Mercado Pago API errors 400, 403, 404
         }
     }
-
 }
 
 module.exports = new MercadoPagoApi();

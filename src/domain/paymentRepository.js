@@ -1,28 +1,22 @@
-// domain/paymentRepository.js
 const mercadoPagoApi = require('../infra/apis/mercadoPagoApi');
 
 class PaymentRepository {
     async createPayment(data) {
         try {
-            await mercadoPagoApi.processPayment(data);
-            console.log('Chamada à API do Mercado Pago para criar pagamento:', data);
-            return true; //adpatar o code
+            return await mercadoPagoApi.processPayment(data);
         } catch (error) {
-            console.log(error);
+            console.log('Error in PaymentRepository:', error);
+            throw error; // Rethrow Mercado Pago API errors
         }
-
     }
 
-    async getPayments() {
-        let payments;
+    async getPayments(criteria, sort, external_reference) {
         try {
-            payments = await mercadoPagoApi.getPayment();
+            return await mercadoPagoApi.getPayments(criteria, sort, external_reference);
         } catch (error) {
-            console.log(error);
+            console.log('Error in PaymentRepository:', error);
+            throw error; // Rethrow Mercado Pago API errors
         }
-        // Implementação real para obter pagamentos usando a API do Mercado Pago
-        console.log('Chamada à API do Mercado Pago para obter pagamentos');
-        return payments;
     }
 }
 
