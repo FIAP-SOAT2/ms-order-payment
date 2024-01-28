@@ -1,0 +1,187 @@
+openapi: 3.0.3
+info:
+  title: Swagger MS Payment
+  description: |-
+    Some useful links:
+    - [The MS Payment repository](https://github.com/FIAP-SOAT2/ms-payment.git)
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: https://localhost:4000/api/v3
+tags:
+  - name: payment
+    description: Everything about your payments
+    externalDocs:
+      description: Find out more
+      url: http://swagger.io
+paths:
+  /payment/processPayment:
+    post:
+      tags:
+        - payment
+      summary: Add a new payment
+      description: Add a new payment to the order
+      operationId: addPayment
+      requestBody:
+        description: Create a new payment in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProcessingPayment'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/ProcessingPayment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProcessingPayment'
+        required: true
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentProcessingResult'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/PaymentProcessingResult'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found.
+        '500':
+          description: Internal Server Error
+      security:
+        - paymentstore_auth:
+            - write:payments
+            - read:payments
+  /payment:
+    get:
+      tags:
+        - payment
+      summary: Finds all payments already done
+      description: You can search for payments made in the last twelve months
+      operationId: findPayments
+      parameters:
+        - name: criteria
+          in: query
+          description: Order payment upwards (using "asc") or downwards ("desc"). Default is desc
+          required: false
+          example: 'desc'
+        - name: sort
+          in: query
+          description: Parameter used to sort a list of payments. Sorting can be done using the following attributes - "date_approved", "date_created", "date_last_updated", "id", "money_release_date".
+          required: false
+          example: 'date_created'
+        - name: external_reference
+          in: query
+          description: It is an external payment reference. It can be, for example, a Central Bank hashcode, acting as the transaction's origin identifier.
+          required: false
+          example: 'ID_REF'
+
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentsResult'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentsResult'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found.
+        '500':
+          description: Internal Server Error
+      security:
+        - paymentstore_auth:
+            - write:payments
+            - read:payments
+components:
+  schemas:
+    ProcessingPayment:
+      type: object
+      properties:
+        transaction_amount:
+          description: 'Cost of the product. Example - The sale of a product for R$100.00 will have a transactionAmount = 100.'
+          required: true
+          type: float
+          example: 12.34
+        description:
+          type: string
+          description: 'Description of the order, of the products purchased'
+          example: '<DESCRIPTION>'
+        payment_method_id:
+          description: 'Indicates the identifier of the payment method selected to make the payment. Options: Pix, Account_money, Defin_transfer, Ted, Cvu'
+          required: true
+          type: string
+          example: 'Pix'
+        payer:
+          required: true
+          type: object
+          description: 'Payer data - ID (identification number), e-mail, identification (document type and number)'
+          properties:
+            email:
+              type: string
+              example: '<EMAIL>'
+    PaymentProcessingResult:
+      type: object
+      properties:
+        id:
+          type: number
+          description: Unique payment identifier
+        date_created:
+          type: string
+          description: Payment creation date
+        date_approved:
+          type: string
+          description: Payment approved date
+        date_last_updated:
+          type: string
+          description: Date of the last payment event
+    PaymentsResult:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the payment, generated automatically by Mercado Pago
+        date_created:
+          type: string
+          description: Date of payment creation
+        date_approved:
+          type: string
+          description: Date of payment approval
+        date_last_updated:
+          type: string
+          description: Date of the last payment event
+        date_of_expiration:
+          type: string
+          description: Date of payment expiration
+        money_release_date:
+          type: string
+          description: Date when the payment is settled, and the money is made available
+        operation_type:
+          type: string
+          description: Payment type
+        issuer_id:
+          type: string
+          description: Identifier of the card issuer
+        payment_method_id:
+          type: string
+          description: Identifier of the selected payment method
+
+
