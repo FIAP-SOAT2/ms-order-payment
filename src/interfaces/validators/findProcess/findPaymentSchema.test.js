@@ -1,5 +1,5 @@
-const findPaymentSchema = require("../findPaymentSchema");
-const GeneralErrors = require("../../../../infra/http/generalErrors");
+const findPaymentSchema = require("./findPaymentSchema");
+const GeneralErrors = require("../../../infra/http/generalErrors");
 
 describe('findPaymentSchema', () => {
     test('should pass valid input', () => {

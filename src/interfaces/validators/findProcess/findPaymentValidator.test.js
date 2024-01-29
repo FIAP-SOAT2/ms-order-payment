@@ -1,5 +1,5 @@
-const GeneralErrors = require('../../../../infra/http/generalErrors');
-const FindPaymentValidator = require('../findPaymentValidator');
+const GeneralErrors = require('../../../infra/http/generalErrors');
+const FindPaymentValidator = require('./findPaymentValidator');
 
 describe('FindPaymentValidator', () => {
     let findPaymentValidator;
