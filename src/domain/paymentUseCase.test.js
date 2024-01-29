@@ -1,8 +1,8 @@
-const PaymentRepository = require('../paymentRepository');
-const PaymentUseCase = require('../paymentUseCase');
-const GeneralErrors = require('../../infra/http/generalErrors');
+const PaymentRepository = require('./paymentRepository');
+const PaymentUseCase = require('./paymentUseCase');
+const GeneralErrors = require('../infra/http/generalErrors');
 
-jest.mock('../paymentRepository');
+jest.mock('./paymentRepository');
 
 describe('PaymentUseCase', () => {
     let paymentUseCase;

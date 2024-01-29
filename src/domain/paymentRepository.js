@@ -5,7 +5,6 @@ class PaymentRepository {
         try {
             return await mercadoPagoApi.processPayment(data);
         } catch (error) {
-            console.log('Error in PaymentRepository:', error);
             throw error; // Rethrow Mercado Pago API errors
         }
     }
@@ -14,7 +13,6 @@ class PaymentRepository {
         try {
             return await mercadoPagoApi.getPayments(criteria, sort, external_reference);
         } catch (error) {
-            console.log('Error in PaymentRepository:', error);
             throw error; // Rethrow Mercado Pago API errors
         }
     }

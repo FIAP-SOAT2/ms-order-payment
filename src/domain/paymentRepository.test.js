@@ -1,7 +1,7 @@
-const mercadoPagoApi = require('../../infra/apis/mercadoPagoApi');
-const PaymentRepository = require('../paymentRepository');
+const mercadoPagoApi = require('../infra/apis/mercadoPagoApi');
+const PaymentRepository = require('./paymentRepository');
 
-jest.mock('../../infra/apis/mercadoPagoApi');
+jest.mock('../infra/apis/mercadoPagoApi');
 
 describe('PaymentRepository', () => {
     let paymentRepository;
