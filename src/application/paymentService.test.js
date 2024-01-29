@@ -1,7 +1,7 @@
-const PaymentUseCase = require('../../domain/paymentUseCase');
-const PaymentService = require('../paymentService');
+const PaymentUseCase = require('../domain/paymentUseCase');
+const PaymentService = require('./paymentService');
 
-jest.mock('../../domain/paymentUseCase');
+jest.mock('../domain/paymentUseCase');
 
 describe('PaymentService', () => {
     let paymentService;

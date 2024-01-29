@@ -1,5 +1,5 @@
-const processPaymentSchema = require('../paymentProcessSchema');
-const GeneralErrors = require('../../../../infra/http/generalErrors');
+const processPaymentSchema = require('./paymentProcessSchema');
+const GeneralErrors = require('../../../infra/http/generalErrors');
 
 describe('processPaymentSchema', () => {
     test('should validate correctly for valid data', () => {

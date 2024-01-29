@@ -1,8 +1,8 @@
-const GeneralErrors = require('../../../infra/http/generalErrors');
-const PaymentService = require('../../../application/paymentService');
-const PaymentController = require('../paymentController');
+const GeneralErrors = require('../../infra/http/generalErrors');
+const PaymentService = require('../../application/paymentService');
+const PaymentController = require('./paymentController');
 
-jest.mock('../../../application/paymentService');
+jest.mock('../../application/paymentService');
 
 describe('PaymentController', () => {
     let paymentController;

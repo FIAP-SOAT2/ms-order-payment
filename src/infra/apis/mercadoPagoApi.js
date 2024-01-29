@@ -28,7 +28,6 @@ class MercadoPagoApi {
             });
             return paymentResult;
         } catch (error) {
-            console.error('Error in Mercado Pago API:', error);
             throw error; // Rethrow Mercado Pago API errors 400, 403, 404
         }
     }
@@ -47,7 +46,6 @@ class MercadoPagoApi {
             return paymentResult;
 
         } catch (error) {
-            console.error('Error in Mercado Pago API:', error);
             throw error; // Rethrow Mercado Pago API errors 400, 403, 404
         }
     }
