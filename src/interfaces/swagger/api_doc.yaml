@@ -82,9 +82,9 @@ paths:
           required: false
           example: 'date_created'
         - name: external_reference
+          required: true
           in: query
           description: It is an external payment reference. It can be, for example, a Central Bank hashcode, acting as the transaction's origin identifier.
-          required: false
           example: 'ID_REF'
 
       responses:

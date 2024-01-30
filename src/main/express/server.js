@@ -8,7 +8,6 @@ const YAML = require('yamljs');
 
 const path = require('path');
 const swaggerDocument = YAML.load(path.join(__dirname, '../../interfaces/swagger/api_doc.yaml'));
-// const swaggerDocument = YAML.load('../../interfaces/api_doc.yaml');
 
 const app = express();
 const port = process.env.PORT || 4004;
@@ -19,6 +18,9 @@ app.use(bodyParser.json());
 app.use('/payment', paymentRoutes);
 app.use('/payment/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
+app.get('/health', (req, res) => {
+    res.status(200).send('OK');
+});
 
 const start = () => {
     app.listen(port, () => {

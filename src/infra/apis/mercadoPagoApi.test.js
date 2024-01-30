@@ -1,4 +1,3 @@
-const {MercadoPagoConfig, Payment} = require('mercadopago');
 const mercadoPagoApi = require('./mercadoPagoApi');
 
 jest.mock('mercadopago');
