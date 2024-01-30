@@ -1,7 +1,9 @@
 
 # MS-PAYMENT
 
-Microservice responsible for managing payments. In this microservice, we use a clean architecture. In addition, we have integrated our microservice with the mercado-pago API and Jest to tests. Our application uses Nodejs 18.
+Microservice responsible for managing payments. In this microservice, we use a clean architecture. 
+In addition, we have integrated our microservice with the mercado-pago API and Jest to tests. 
+Our application uses Nodejs 18.
 
 
 ### What I need?
@@ -59,61 +61,54 @@ To separate concerns, the application was built with a Clean Architecture. It is
 
 ## Directory Structure:
 
-### Application
+```bash
+============= APPLICATION LAYER =====================================================================
+Service: 
+paymentService.js // Contains application logic, acting as an intermediary layer between interfaces 
+and business logic. It is responsible for coordinating operations and manipulating data as needed.
 
-**Service:** Contains application logic, acting as an intermediary layer between interfaces and business logic. It is responsible for coordinating operations and manipulating data as needed.
 
-### Domain
+============= DOMAIN LAYER =====================================================================
+paymentRepository.js //Represents the repository layer, responsible for defining interfaces that abstract 
+data access. These interfaces are implemented in the infrastructure layers.
 
-**Repository**: Represents the repository layer, responsible for defining interfaces that abstract data access. These interfaces are implemented in the infrastructure layers.
+paymentUseCase.js //Contains domain-specific use cases, implementing the core business logic.
 
-**UseCase**: Contains domain-specific use cases, implementing the core business logic.
+============= INFRA LAYER =====================================================================
+apis
+  L mercadoPagoApi.js //Implements communication with the Mercado Pago API, encapsulating 
+  infrastructure details related to this specific integration.
+           
+http             
+  L generalErrors.js //Defines general errors that can be used across various layers to ensure consistency.
 
-### infra
+============= INTERFACES LAYER =====================================================================
+controllers
+ L paymentController.js //Responsible for handling HTTP requests and coordinating communication 
+ between application and domain layers.
 
-#### Apis
 
-**mercadoPagoApi**
+swagger
+  L api_doc.yaml  //API documentation using the Swagger format, providing a clear specification of 
+  available endpoints.
 
-Implements communication with the Mercado Pago API, encapsulating infrastructure details related to this specific integration.
 
-#### Http
-
-**generalErrors** 
-
-Defines general errors that can be used across various layers to ensure consistency.
-
-### Interfaces
-
-**Controllers**
-
-Responsible for handling HTTP requests and coordinating communication between application and domain layers.
-
-**swagger**
-
-API documentation using the Swagger format, providing a clear specification of available endpoints.
-
-**Validator**
-
-**schema**
-
-Defines validation schemas using Joi to ensure input data meets requirements.
-
-**validator**
-
-Responsible for validating input data based on the defined schemas.
-
-### Main
-
-**Express**
-Initializes the Express server and related configurations.
-
-**routes**
-Defines application routes, connecting HTTP requests to the appropriate controllers.
-
-**index.js**
-Main entry point, initializes and connects different parts of the application.
-
+validators
+  L findProcess 
+   L findPaymentSchema.js  //Defines validation schemas using Joi to ensure input data meets requirements.   
+   L findPaymentValidator.js //Responsible for validating input data based on the defined schemas.              
+  L paymentProcess   
+   L paymentProcessSchema.js  //Defines validation schemas using Joi to ensure input data meets requirements. 
+   L paymentProcessValidator.js //Responsible for validating input data based on the defined schemas.         
+    
+============= MAIN LAYER =====================================================================
+express
+  L server.js //Initializes the Express server and related configurations.
+routes
+  L payment.js //Defines application routes, connecting HTTP requests to the appropriate controllers.
+.env                  
+index.js //Main entry point, initializes and connects different parts of the application.            
+```
 ### What we use?
 
 #### Environment
