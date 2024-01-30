@@ -13,7 +13,7 @@ on:
       - .github/dependabot.yml
 
 env:
-  PORT: 3040
+  PORT: 4004
 
 permissions:
   id-token: write
@@ -68,4 +68,4 @@ jobs:
 
     steps:
       - name: Deploy to minikube
-        run: kubectl apply -f k8s/
+        run: kubectl apply -f ../../k8s/
