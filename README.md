@@ -11,43 +11,18 @@ With this structure, your environment will have everything you need to build a p
 
 Node, docker and docker-compose
 Kubectl and minikube (to deploy the application to a Kubernetes cluster)
-### Running the application on a local Kubernetes cluster
 
-- `minikube start`: starts the minikube to create a Kubernetes cluster.
-- `cd orders-project-clean-architecture`: to be in the project's root directory
-- `minikube ip`: get the minikube IP address
-
-
-Now, you need to set this <b>IP Address</b> on Kubernetes Service (service.yaml) in externalIPs field:
-
-```
-spec:
-  type: LoadBalancer
-  ports:
-  - name: "http"
-    port: 4004
-    targetPort: 4004
-  externalIPs:
-  - your-minikube-ip
-  selector:
-    app: orders-project
-```
-
-Then you can deploy the application to the cluster:
-
-- `kubectl apply -f deploy/`: apply all configuration files from the deploy folder to the created cluster.
-- `kubectl port-forward <name-of-the-pod> 4004:4004`: run the application on your machine using the port 4004.
 ### Running the application directly on your local machine
 
 You can use these commands to start the application:
 
-- `docker build -t order . --no-cache`
+- `docker build -t payment . --no-cache`
 - `docker-compose up -d --force-recreate`
 
 Docker-compose is set to start an instance of Postgres and the entire application.
 
 - `npm i`: install all dependencies
-- ` node src/main/index.js`: run server
+- `npm start`: start the server
 
 
 ### Swagger
@@ -59,7 +34,6 @@ This project was built using Clean Architecture and SOLID principles.
 
 To separate concerns, the application was built with a Clean Architecture. It is divided into Domain, Application, Infra and Main layers.
 
-## Directory Structure:
 
 ```bash
 ============= APPLICATION LAYER =====================================================================
@@ -115,4 +89,4 @@ index.js //Main entry point, initializes and connects different parts of the app
 
 - [Node](https://nodejs.org/en/) - Node.js® is a JavaScript runtime built on Chrome's V8 JavaScript engine.
 
-- [MercadoPago] (https://github.com/mercadopago/sdk-nodejs) This library provides developers with a simple set of bindings to help you integrate Mercado Pago API to a website and start receiving payments.
+- [MercadoPago](https://github.com/mercadopago/sdk-nodejs) This library provides developers with a simple set of bindings to help you integrate Mercado Pago API to a website and start receiving payments.
