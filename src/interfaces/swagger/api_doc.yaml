@@ -63,7 +63,7 @@ paths:
         - paymentstore_auth:
             - write:payments
             - read:payments
-  /payment:
+  /payment/processPayment:
     get:
       tags:
         - payment

@@ -13,7 +13,7 @@ router.post('/processPayment',
     validatePaymentProcessData.validatePaymentData.bind(ValidatePaymentProcessData),
     paymentController.processPayment.bind(paymentController));
 
-router.get('/',
+router.get('/processPayment',
     validateFindPaymentData.validatePaymentData.bind(ValidateFindPaymentData),
     paymentController.getPayments.bind(paymentController));
 
