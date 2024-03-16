@@ -15,10 +15,10 @@ const port = process.env.PORT || 4004;
 app.use(bodyParser.json());
 
 // Rotas
-app.use('/payment', paymentRoutes);
+app.use('/api/payment', paymentRoutes);
 app.use('/payment/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-app.get('/health', (req, res) => {
+app.get('/api/payment/health-check', (req, res) => {
     res.status(200).send('OK');
 });
 
