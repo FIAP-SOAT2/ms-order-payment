@@ -14,21 +14,26 @@ class MercadoPagoApi {
             this.payment = new Payment(this.client);
         }
     }
-
     async processPayment(paymentInfo) {
         try {
-            const {payment, paymentValue, paymentDescription} = paymentInfo;
+            const {orderId,userMail,payment, paymentValue, paymentDescription} = paymentInfo;
             const paymentResult = await this.payment.create({
                 body: {
                     transaction_amount: paymentValue,
                     description: paymentDescription,
-                    payment_method_id: 'pix',
+                    payment_method_id: payment,
+                    external_reference: orderId,
                     payer: {
-                        email: 'identifier@mail.com'
+                        email: userMail
                     },
                 }
             });
-            publish(JSON.stringify(paymentResult));
+            const paymentStatus = {
+                id: paymentResult.id,
+                status: true,
+                orderId: paymentResult.external_reference,
+            }
+            publish(JSON.stringify(paymentStatus));
             return paymentResult;
         } catch (error) {
             throw error; // Rethrow Mercado Pago API errors 400, 403, 404
