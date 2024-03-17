@@ -1,4 +1,5 @@
 const {MercadoPagoConfig, Payment} = require('mercadopago');
+const {publish} = require('../../infra/aws/sns-publisher');
 
 class MercadoPagoApi {
 
@@ -16,16 +17,18 @@ class MercadoPagoApi {
 
     async processPayment(paymentInfo) {
         try {
+            const {payment, paymentValue, paymentDescription} = paymentInfo;
             const paymentResult = await this.payment.create({
                 body: {
-                    transaction_amount: +paymentInfo.transaction_amount,
-                    description: paymentInfo.description,
-                    payment_method_id: paymentInfo.payment_method_id,
+                    transaction_amount: paymentValue,
+                    description: paymentDescription,
+                    payment_method_id: 'pix',
                     payer: {
-                        email: paymentInfo.payer.email
+                        email: 'identifier@mail.com'
                     },
                 }
             });
+            publish(JSON.stringify(paymentResult));
             return paymentResult;
         } catch (error) {
             throw error; // Rethrow Mercado Pago API errors 400, 403, 404
