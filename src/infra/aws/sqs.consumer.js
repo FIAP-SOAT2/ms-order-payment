@@ -3,14 +3,12 @@ const AWS = require("aws-sdk");
 const mercadoPagoApi = require("../apis/mercadoPagoApi");
 
 AWS.config.update({
-  region: "eu-central-1",
-  accessKeyId: "dummy",
-  secretAccessKey: "dummy",
+  region: "us-east-1",
+  // accessKeyId: "dummy",
+  // secretAccessKey: "dummy",
 });
 
-const sqs = new AWS.SQS({
-  endpoint: "http://localhost:4566",
-});
+const sqs = new AWS.SQS();
 
 const QueueUrl = process.env.QUEUE_URL;
 
@@ -19,7 +17,6 @@ async function deleteMessage(receiptHandle) {
     QueueUrl,
     ReceiptHandle: receiptHandle,
   };
-  console.log(deleteMessage)
   await sqs.deleteMessage(deleteParams).promise();
 }
 
@@ -31,14 +28,12 @@ async function receive() {
         MaxNumberOfMessages: 1,
       })
       .promise();
-      console.log(queueData)
+
     if (queueData && queueData.Messages && queueData.Messages.length > 0) {
       const [firstMessage] = queueData.Messages;
       console.log("Processing message", firstMessage);
       await mercadoPagoApi.processPayment(JSON.parse(JSON.parse(firstMessage.Body).Message));
       await deleteMessage(firstMessage.ReceiptHandle);
-    } else {
-      console.log("No messages in the queue");
     }
   } catch (e) {
     console.error("Error receiving message", e);

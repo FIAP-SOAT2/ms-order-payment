@@ -14,12 +14,16 @@ class MercadoPagoApi {
             this.payment = new Payment(this.client);
         }
     }
+
     async processPayment(paymentInfo) {
+
         try {
-            if(paymentInfo.payment !== 'pix'){
-                await validatePayment(paymentInfo);
+
+            if (paymentInfo.payment !== 'pix') {
+                await this.validatePayment(paymentInfo);
+                return;
             }
-            const {orderId,userMail,payment, paymentValue, paymentDescription} = paymentInfo;
+            const {orderId, userMail, payment, paymentValue, paymentDescription} = paymentInfo;
             const paymentResult = await this.payment.create({
                 body: {
                     transaction_amount: paymentValue,
@@ -34,7 +38,7 @@ class MercadoPagoApi {
             const paymentStatus = {
                 id: paymentResult.id,
                 status: true,
-                orderId: paymentResult.external_reference,
+                orderId,
             }
             publish(JSON.stringify(paymentStatus));
             return paymentResult;
@@ -47,7 +51,7 @@ class MercadoPagoApi {
         const paymentStatus = {
             id: 9999999,
             status: false,
-            orderId: paymentResult.external_reference,
+            orderId: paymentInfo.orderId,
         }
         publish(JSON.stringify(paymentStatus));
     }
