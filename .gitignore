@@ -3,3 +3,4 @@ src/main/.env
 src/interfaces/_snapshots_
 coverage
 .idea
+.env

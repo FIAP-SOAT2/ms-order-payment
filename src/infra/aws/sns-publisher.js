@@ -10,13 +10,11 @@ const sns = new AWS.SNS({
   endpoint: "http://localhost:4566",
 });
 
-const TopicArn = 'arn:aws:sns:eu-central-1:000000000000:payment-creation-response';
-
 async function publish(msg) {
   const publishParams = {
-    TopicArn,
+    TopicArn: process.env.PAYMENT_TOPIC,
     Message: msg,
-  };
+};
   try {
     const topicRes = await sns.publish(publishParams).promise();
     console.log("TOPIC Response: ", topicRes);

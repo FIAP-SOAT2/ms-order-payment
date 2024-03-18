@@ -16,6 +16,9 @@ class MercadoPagoApi {
     }
     async processPayment(paymentInfo) {
         try {
+            if(paymentInfo.payment !== 'pix'){
+                await validatePayment(paymentInfo);
+            }
             const {orderId,userMail,payment, paymentValue, paymentDescription} = paymentInfo;
             const paymentResult = await this.payment.create({
                 body: {
@@ -36,8 +39,17 @@ class MercadoPagoApi {
             publish(JSON.stringify(paymentStatus));
             return paymentResult;
         } catch (error) {
-            throw error; // Rethrow Mercado Pago API errors 400, 403, 404
+            throw error;
         }
+    }
+
+    async validatePayment(paymentInfo) {
+        const paymentStatus = {
+            id: 9999999,
+            status: false,
+            orderId: paymentResult.external_reference,
+        }
+        publish(JSON.stringify(paymentStatus));
     }
 
     async getPayments(criteria = 'desc', sort = 'date_created', external_reference = null) {
@@ -54,7 +66,7 @@ class MercadoPagoApi {
             return paymentResult;
 
         } catch (error) {
-            throw error; // Rethrow Mercado Pago API errors 400, 403, 404
+            throw error;
         }
     }
 }
