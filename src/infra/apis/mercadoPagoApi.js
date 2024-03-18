@@ -1,4 +1,5 @@
 const {MercadoPagoConfig, Payment} = require('mercadopago');
+const {publish} = require('../../infra/aws/sns-publisher');
 
 class MercadoPagoApi {
 
@@ -15,21 +16,44 @@ class MercadoPagoApi {
     }
 
     async processPayment(paymentInfo) {
+
         try {
+
+            if (paymentInfo.payment !== 'pix') {
+                await this.validatePayment(paymentInfo);
+                return;
+            }
+            const {orderId, userMail, payment, paymentValue, paymentDescription} = paymentInfo;
             const paymentResult = await this.payment.create({
                 body: {
-                    transaction_amount: +paymentInfo.transaction_amount,
-                    description: paymentInfo.description,
-                    payment_method_id: paymentInfo.payment_method_id,
+                    transaction_amount: paymentValue,
+                    description: paymentDescription,
+                    payment_method_id: payment,
+                    external_reference: orderId,
                     payer: {
-                        email: paymentInfo.payer.email
+                        email: userMail
                     },
                 }
             });
+            const paymentStatus = {
+                id: paymentResult.id,
+                status: true,
+                orderId,
+            }
+            publish(JSON.stringify(paymentStatus));
             return paymentResult;
         } catch (error) {
-            throw error; // Rethrow Mercado Pago API errors 400, 403, 404
+            throw error;
         }
+    }
+
+    async validatePayment(paymentInfo) {
+        const paymentStatus = {
+            id: 9999999,
+            status: false,
+            orderId: paymentInfo.orderId,
+        }
+        publish(JSON.stringify(paymentStatus));
     }
 
     async getPayments(criteria = 'desc', sort = 'date_created', external_reference = null) {
@@ -46,7 +70,7 @@ class MercadoPagoApi {
             return paymentResult;
 
         } catch (error) {
-            throw error; // Rethrow Mercado Pago API errors 400, 403, 404
+            throw error;
         }
     }
 }
