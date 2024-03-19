@@ -14,12 +14,26 @@ const app = express();
 const port = process.env.PORT || 4004;
 app.use(bodyParser.json());
 
+app.use((_req, res, next) => {
+    res.set('Content-Security-Policy', "default-src 'self'; frame-ancestors 'self'; form-action 'self'")
+        .header('X-Content-Type-Options', 'nosniff')
+        .removeHeader('X-Powered-By');
+    next();
+});
+
 // Rotas
 app.use('/api/payment', paymentRoutes);
 app.use('/payment/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.get('/api/payment/health-check', (req, res) => {
     res.status(200).send('OK');
+});
+
+app.use((_req, res) => {
+    res.set('Content-Security-Policy', "default-src 'self'; frame-ancestors 'self'; form-action 'self'")
+        .header('X-Content-Type-Options', 'nosniff')
+        .status(404)
+        .send('Resource not found')
 });
 
 const start = () => {
